@@ -1,0 +1,86 @@
+# What is ERC-4626?
+
+**ERC-4626** is an extension of the ERC-20 standard that defines a common interface for **yield-bearing vaults**. Users deposit an asset (e.g., USDC) and receive ERC-20 **shares** that represent their position. Shares can be redeemed for the **underlying asset plus accrued yield**.
+
+---
+
+## Why Standardize Yield Vaults?
+
+### 🧱 Problem (Pre-4626)
+- Every yield protocol had custom wrappers/interfaces.
+- Friction for aggregators, dashboards, and strategy builders.
+- Difficult to compose vaults across protocols (e.g., Superform).
+
+### ✅ Benefits (Post-4626)
+- Shared interface across protocols.
+- Enables composable yield protocols (zaps, auto-compounders, tranching).
+- Easier integration for wallets, aggregators, vault curators, and funds.
+
+---
+
+## Key Use Cases
+
+### 🔹 Lending Vaults
+- **Morpho** and **Aave** vaults are natively ERC-4626 compliant.
+- Vault shares accrue lending yield passively.
+
+### 🔹 Yield Aggregators
+- **Yearn v3** is entirely built on ERC-4626.
+- Vaults deposit into multiple strategies, expose yield via the 4626 interface.
+- Aggregators like **Instadapp** and **Superform** natively integrate 4626 vaults.
+
+### 🔹 Real-World Assets (RWAs)
+- **Maple v2** vaults are 4626-native.
+- Protocols like **Nest**, **OpenEden**, and **Ondo** use 4626 wrappers for tokenized T-Bills and credit vaults.
+- Vault shares serve as a clean abstraction for tokenized cash flow claims.
+
+---
+
+## Vault Key Components
+
+- **Asset**: Underlying token managed by the vault.
+- **Share**: ERC-20 vault token representing the user’s balance.
+- **Fee**: May apply on deposit, withdrawal, etc.
+
+---
+
+## Vault Core Functions — `IERC4626` Interface
+
+- `asset()`: Returns the underlying asset token (e.g., USDC).
+- `totalAssets()`: Total assets currently held by the vault.
+
+### Conversion Functions
+- `convertToShares(uint assets)`: Estimate how many shares will be minted for given assets.
+- `convertToAssets(uint shares)`: Estimate how many assets will be returned for given shares.
+
+### Deposit Flow
+- `maxDeposit(address)`: Max amount of assets this user can deposit.
+- `previewDeposit(uint assets)`: Simulate share output for a deposit.
+- `deposit(uint assets, address receiver)`: Transfer assets in, mint shares to receiver.
+
+### Mint Flow
+- `maxMint(address)`: Max shares this user can mint.
+- `previewMint(uint shares)`: Simulate required assets to mint shares.
+- `mint(uint shares, address receiver)`: Mints exact shares by depositing required assets.
+
+### Withdraw Flow
+- `maxWithdraw(address)`: Max assets withdrawable by user.
+- `previewWithdraw(uint assets)`: Simulate shares needed to withdraw assets.
+- `withdraw(uint assets, address receiver, address owner)`: Burns shares, sends assets to receiver.
+
+### Redeem Flow
+- `maxRedeem(address)`: Max shares redeemable by user.
+- `previewRedeem(uint shares)`: Simulate assets receivable on redeeming shares.
+- `redeem(uint shares, address receiver, address owner)`: Redeems shares to assets, sends to receiver.
+
+### Events
+- `Deposit(...)`: Emitted on deposit or mint.
+- `Withdraw(...)`: Emitted on withdraw or redeem.
+
+---
+
+## Open Questions
+
+- Should vault metadata (e.g., yield rate, risk level) be standardized?
+- Can ERC-4626 support tranching or rebasing in a future revision?
+- How do 4626 vaults evolve cross-chain (e.g., shared liquidity vaults)?
