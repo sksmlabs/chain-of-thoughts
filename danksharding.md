@@ -97,7 +97,7 @@ For blob transaction, the TransactionType is `BLOB_TX_TYPE` = `Bytes1(0x03)`.
 
 The field `max_fee_per_blob_gas` is a `uint256` and the field `blob_versioned_hashes` represents a list of hash outputs from`kzg_to_versioned_hash`.
 
-![table](../media/blobTx.png)
+![table](./media/blobTx.png)
 
 ---
 
