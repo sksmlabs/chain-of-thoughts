@@ -317,6 +317,7 @@ contract RebaseToken is IERC20, Ownable {
     }
 }
 ```
+---
 
 ## Solution 3: ERC4626 Token Architecture
 
