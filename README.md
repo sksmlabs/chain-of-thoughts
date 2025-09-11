@@ -11,3 +11,4 @@ This is general repository of ideas curated by me. It can contain some high leve
 
 #### Engineering
 - [Rust Notes](https://github.com/sksmlabs/Notebook/blob/main/Rust.md): Surface level intro into Rust programming primitives
+- [Solana Notes](https://github.com/sksmlabs/Notebook/tree/main)
