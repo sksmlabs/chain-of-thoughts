@@ -7,4 +7,4 @@ This is general repository of ideas curated by me. It can contain some high leve
 - YieldTokens: These notes explores three candidate models—Two-Token Systems, Rebasing Tokens, and ERC-4626 Vaults—each approaching the trade-offs of stability, composability, and yield attribution in unique ways.
 
 #### From Work
-- Macha Federated Network: Macha is building a Federated Network for Social Layers with a mission to bring decentralized social content from blockchains and P2P ecosystem together, into a single discovery and distribution layer of new internet. Access the notes on architecture of underlying protocol.
+- [Macha Federated Network](https://github.com/sksmlabs/Notebook/blob/main/Macha.md): Macha is building a Federated Network for Social Layers with a mission to bring decentralized social content from blockchains and P2P ecosystem together, into a single discovery and distribution layer of new internet. Access the notes on architecture of underlying protocol.
