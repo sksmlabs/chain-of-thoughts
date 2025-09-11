@@ -7,7 +7,7 @@ This is general repository of ideas curated by me. It can contain some high leve
 - [YieldTokens](https://github.com/sksmlabs/Notebook/blob/main/YieldToken.md): Understanding trade-offs between diff yield token models - Two-Token Systems, Rebasing Tokens, and ERC-4626 Vaults. 
 
 #### From Work
-- [Macha Federated Network](https://github.com/sksmlabs/Notebook/blob/main/Macha.md): A Federated Network for decentralized social blockchains. 
+- [Macha Federated Network](https://github.com/sksmlabs/Notebook/blob/main/Macha.md): A Federated Network for decentralized social blockchains built with EVM indexers, ipfs & lib p2p
 
 #### Engineering
 - [Rust Notes](https://github.com/sksmlabs/Notebook/blob/main/Rust.md): Surface level intro into Rust programming primitives
