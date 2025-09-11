@@ -1,3 +1,5 @@
+# Rust Notes
+
 - cargo
 - serde
 - toml
@@ -18,7 +20,7 @@
 https://doc.rust-lang.org/book/ch03-02-data-types.html
 
 ---
-### Rust
+#### Intro
 - `rust` is an ahead-of-time compiled language, meaning you can compile a program and give the executable to someone else, and they can run it even without having Rust installed
 - Rust is an expression based language.
 
