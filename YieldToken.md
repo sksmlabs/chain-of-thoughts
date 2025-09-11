@@ -317,3 +317,65 @@ contract RebaseToken is IERC20, Ownable {
     }
 }
 
+## Solution 3: ERC4626 Token Architecture
+
+### Vault Properties
+
+- **Asset Token**: The underlying token deposited (e.g., USDC, DAI)
+- **Share Token**: The vault’s ERC-20 receipt token representing ownership (accrues yield)
+- **Yield:** Reflected in increasing value per share, not by minting new shares
+
+| Term | Description |
+| --- | --- |
+| `asset` | The underlying token users deposit into the vault |
+| `share` | ERC-20 receipt token minted in exchange for deposited assets |
+| `totalAssets` | Total amount of underlying assets managed by the vault |
+| `totalSupply` | Total number of shares (receipt tokens) in circulation |
+| `Share Price` or `Exchange Rate` | `totalAssets / totalSupply` – reflects yield accrual |
+
+### Vault Workflow
+
+1. **Deposits Mint Shares**
+   - Users deposit asset tokens → receive shares
+   - First depositor gets 1:1 (if vault is empty)
+   - Later depositors get shares based on current share price:  
+     `shares = assets * totalSupply / totalAssets` (if `totalSupply > 0`)
+
+2. **Yield Increases Vault Asset Pool**
+   - Vault earns yield via external strategy (not specified in ERC-4626)
+   - Yield increases `totalAssets`, but **does not change `totalSupply`**
+   - Result: **share price increases**
+
+3. **Redemptions Use Share Price**
+   - Users redeem or withdraw by burning shares
+   - The amount of asset returned is:  
+     `assets = shares * totalAssets / totalSupply`
+
+4. **Transfers Accrued Yield**
+   - Shares are standard ERC-20 tokens
+   - Transferring shares **also transfers the proportional ownership**, including **accrued yield**
+   - No extra logic needed — ownership and yield travel together
+
+### x4626USDC - The Vault Token
+
+- **Function:** Tracks proportional ownership of the vault, including original deposit and accrued yield
+- **Peg:** 1 x4626USDC = 1 USDC + yield (floating NAV; not pegged to $1)
+- **Accessible:** Available in wallet with **24/7/365 Minting & Redemption**
+
+---
+
+## ERC-4626 vs Rebasing Tokens
+
+| Feature | **ERC-4626 Vaults** | **Rebasing Tokens** |
+| --- | --- | --- |
+| 📦 Token Model | **Share-based** (e.g., `xUSDC`) | **Balance-based** (e.g., `rUSDC`) |
+| 📈 How Yield Is Represented | Value per share increases over time | Token **balance increases** via rebase |
+| 🔁 Yield Distribution Mechanism | Yield is baked into **exchange rate** | Yield is distributed by **changing balances** |
+| 💸 Transfer Behavior | Transfers move full **claim on underlying assets** | Transfers move **rebased balances** |
+| 🔍 Transparency for Users | Yield visible via `previewRedeem()`/apps | Yield visible directly in wallet balance |
+| 🔐 Gas Efficiency | No rebases; standard ERC-20 transfers | Rebases may require gas/keepers |
+| 🧠 Accounting Simplicity | Cleaner internal accounting (shares) | Requires special math for rebasing & gons |
+| 📲 UX Simplicity | Less intuitive (1 xUSDC ≠ 1 USDC) | Intuitive (balance grows) |
+| 🛠️ Token Standards Used | ERC-4626 | Custom ERC-20 with rebase extension |
+
+
