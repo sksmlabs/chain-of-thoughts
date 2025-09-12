@@ -5,15 +5,109 @@
 - Native
 - Seahorse
 
-#### Solana Concepts
-- Account
-- Rent
-
 #### Solana Programs
 - system_program
 - token_program
 
 ---
+### Validator
+### RPC Nodes
+---
+### Account
+
+**Account Metadata:** 
+Every account holds metadata set comprising of following information
+| Field       | Description                                                                                   |
+|-------------|-----------------------------------------------------------------------------------------------|
+| pubkey    | the account’s public key (address)    |
+| lamports    | The account’s SOL balance, denominated in lamports where 1 lamport = 1 billionth of a SOL.    |
+| owner       | The address of the program that owns the account.                                             |
+| executable  | A boolean variable that indicates if the account contains executable code.                    |
+| data        | The raw data byte array stored in the account (storage variables or executable code).          |
+| rent_epoch  | Indicates the next epoch at which the account will owe rent.                                  |
+
+```
+// example
+{
+  "pubkey": "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpA4cB2UhzD",
+  "lamports": 2039280,
+  "owner": "11111111111111111111111111111111",
+  "executable": false,
+  "rentEpoch": 354,
+  "data": ["3McQe...","base64"]
+}
+```
+
+**Account Rent:** Rent is the fee every Solana account pays to store data on the blockchain, and is denominated as Lamports. Rent is calculated based on the size of account's storage. 
+
+---
+### Transaction
+- Transactions are atomic - if any instruction fails, the entire transaction fails and no changes occur.
+- Instructions in a transaction execute in sequential order.
+- The transaction size limit is 1232 bytes.
+
+A `transaction` is made up of:
+| Field       | Description                                                                                                                      |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------|
+| Signatures  | An array of signatures from all accounts required as signers for the transaction. Each signature is created by signing the Message with the account's private key. |
+| Message     | The transaction message that includes the list of instructions to be processed atomically.                                       |
+
+```
+pub struct Transaction {
+    #[wasm_bindgen(skip)]
+    #[serde(with = "short_vec")]
+    pub signatures: Vec<Signature>,
+
+    #[wasm_bindgen(skip)]
+    pub message: Message,
+}
+```
+
+The structure of a `transaction message` consists of:
+| Field             | Description                                                                 |
+|-------------------|-----------------------------------------------------------------------------|
+| Message Header    | Specifies the number of signer and read-only accounts.                      |
+| Account Addresses | An array of account addresses required by the instructions in the transaction. |
+| Recent Blockhash  | Acts as a timestamp for the transaction.                                    |
+| Instructions      | An array of instructions to be executed.                                   |
+
+```
+pub struct Message {
+    /// The message header, identifying signed and read-only `account_keys`.
+    pub header: MessageHeader,
+
+    /// All the account keys used by this transaction.
+    #[serde(with = "short_vec")]
+    pub account_keys: Vec<Pubkey>,
+
+    /// The id of a recent ledger entry.
+    pub recent_blockhash: Hash,
+
+    /// Programs that will be executed in sequence and committed in
+    /// one atomic transaction if all succeed.
+    #[serde(with = "short_vec")]
+    pub instructions: Vec<CompiledInstruction>,
+}
+```
+```
+pub struct MessageHeader {
+    /// The number of signatures required for this message to be considered
+    /// valid. The signers of those signatures must match the first
+    /// `num_required_signatures` of [`Message::account_keys`].
+    pub num_required_signatures: u8,
+
+    /// The last `num_readonly_signed_accounts` of the signed keys are read-only
+    /// accounts.
+    pub num_readonly_signed_accounts: u8,
+
+    /// The last `num_readonly_unsigned_accounts` of the unsigned keys are
+    /// read-only accounts.
+    pub num_readonly_unsigned_accounts: u8,
+}
+```
+---
+### Anchor
+
 #### Anchor Project directory
 - Program folder
 - Tests folder
@@ -240,3 +334,7 @@ pub mint: Account<'info, Mint>,
 
 pub rent: Sysvar<'info, Rent>,
 ```
+
+----
+Sources
+- https://extremelysunnyyk.medium.com/solana-geyser-plugins-powering-high-speed-data-streaming-guide-9ae2328b8454
