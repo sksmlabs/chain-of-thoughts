@@ -16,14 +16,32 @@
 
 -----
 ```
+// List running containers
+docker ps
+// List running/stopped containers
+docker ps -a
+```
+```
+// Start/stop container
+docker start [CONTAINER_ID]
+docker stop [CONTAINER_ID]
+```
+```
 // Remove
 docker-compose down -v
 // Create
 docker-compose up -d
 ```
 ```
-# both kafka and kafka-ui should be "Up"
-docker ps
+docker compose up -d --build
+```
+```
+// Check logs for app
+docker compose logs -f app
+```
+```
+// Run app
+docker compose exec app npm run start
 ```
 ```
 // Check UI Configuration
