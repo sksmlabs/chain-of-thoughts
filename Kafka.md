@@ -24,20 +24,26 @@ docker ps -a
 ```
 // Start/stop container
 docker start [CONTAINER_ID]
+// Stop All
+docker stop
+// Stop specific
 docker stop [CONTAINER_ID]
 ```
 ```
 // Remove
-docker-compose down -v
+docker compose down
+docker compose down -v
+// Build
+docker componse build
 // Create
-docker-compose up -d
-```
-```
+docker compose up
+docker compose up -d
+// 
 docker compose up -d --build
 ```
 ```
 // Check logs for app
-docker compose logs -f app
+docker compose logs -f [container]
 ```
 ```
 // Run app
